@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('joi').extend(require('@joi/date'));
 
-const dailyProductSchema = Schema({
+const diarySchema = Schema({
   date: {
     type: Date,
     required: [true, 'Date is a required field'],
@@ -36,6 +36,6 @@ const joiSchema = Joi.object({
   calories: Joi.number(),
 });
 
-const DailyProduct = model('dailyProduct', dailyProductSchema);
+const DailyProduct = model('dailyProduct', diarySchema);
 
 module.exports = { DailyProduct, joiSchema };

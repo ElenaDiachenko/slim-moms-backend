@@ -9,7 +9,7 @@ const refreshToken = async (req, res) => {
   if (authHeader) {
     const activeSession = await Session.findById(req.body.sid);
     if (!activeSession) {
-      throw new RequestError('Not found');
+      throw RequestError('Not found');
     }
 
     const reqRefreshToken = authHeader.replace('Bearer', '');

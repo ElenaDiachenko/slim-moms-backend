@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {
-  const { password, email, bloodType } = req.body;
+  const { password, email } = req.body;
   const user = await User.findOne({ email });
 
   if (!user || !user.comparePassword(password)) {
@@ -16,20 +16,15 @@ const login = async (req, res) => {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '3h' });
 
-  await User.findByIdAndUpdate(user._id, { token, bloodType });
+  await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
     status: 'success',
     code: 200,
     data: {
       token,
-      user: {
-        email,
-        name: user.name,
-      },
-      bloodType,
     },
   });
 };

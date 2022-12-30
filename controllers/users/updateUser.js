@@ -2,8 +2,6 @@ const { User } = require('../../models');
 const { BloodDietProduct } = require('../../models');
 const { RequestError } = require('../../helpers');
 
-// Error?????????
-// Forbid to return password!!!!!!!!!!!!!!!!!!!!!!!!!
 
 const updateUser = async (req, res) => {
   const { bloodType, height, age, curWeight, desWeight } = req.body;

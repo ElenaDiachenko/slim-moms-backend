@@ -7,8 +7,8 @@ const swaggerDocument = require('./swagger.json');
 
 const authRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
-const dailyproductsRouter = require('./routes/api/dailyproducts');
-const bloodDietProductsRouter = require('./routes/api/bloodDietProducts');
+const diaryRouter = require('./routes/api/diary');
+const productsRouter = require('./routes/api/products');
 
 const app = express();
 
@@ -20,8 +20,8 @@ app.use(express.json());
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
-app.use('/api/diary', dailyproductsRouter);
-app.use('/api/bloodproducts', bloodDietProductsRouter);
+app.use('/api/diary', diaryRouter);
+app.use('/api/products', productsRouter);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

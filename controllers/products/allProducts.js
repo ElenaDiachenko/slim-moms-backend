@@ -1,7 +1,7 @@
-const { BloodDietProduct } = require('../../models');
+const { Product } = require('../../models');
 
 const allProducts = async (req, res) => {
-  const result = await BloodDietProduct.find({});
+  const result = await Product.find({});
 
   res.json({
     status: 'success',

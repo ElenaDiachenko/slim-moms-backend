@@ -1,7 +1,7 @@
-const { BloodDietProduct } = require('../../models');
+const { Product } = require('../../models');
 const { RequestError } = require('../../helpers');
 
-const getDiet = async (req, res, next) => {
+const getDiet = async (req, res) => {
   //   "ФОРМУЛА ДЛЯ РОЗРАХУНКУ ДЕННОЇ НОРМИ КАЛОРІЙ ДЛЯ ЖІНОК
   // 10 * вага + 6.25 * зріст - 5 * вік - 161 - 10 * (вага - бажана вага)"
   const { bloodType, height, age, curWeight, desWeight } = req.body;
@@ -14,7 +14,7 @@ const getDiet = async (req, res, next) => {
       10 * (curWeight - desWeight)
   );
 
-  const data = await BloodDietProduct.find();
+  const data = await Product.find();
 
   const notRecProducts = data.filter(
     item => item.groupBloodNotAllowed[bloodType] === true

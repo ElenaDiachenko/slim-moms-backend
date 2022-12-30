@@ -1,13 +1,11 @@
-const { DailyProduct } = require('./dailyProduct');
-const { BloodDietProduct } = require('./bloodDietProduct');
-const { getBloodDietSchema } = require('./bloodDietProduct');
+const { DailyProduct } = require('./diary');
+const { Product } = require('./product');
 const { User } = require('./user');
 const { Session } = require('./session');
 
 module.exports = {
   User,
   DailyProduct,
-  BloodDietProduct,
+  Product,
   Session,
-  getBloodDietSchema,
 };
