@@ -22,7 +22,7 @@ const productSchema = Schema(
   { versionKey: false, timestamps: true }
 );
 
-const joiSchema = Joi.object({
+const joiCalcSchema = Joi.object({
   bloodType: Joi.number().min(1).max(4).required(),
   height: Joi.number().min(100).max(250).required(),
   age: Joi.number().min(18).max(100).required(),
@@ -32,4 +32,4 @@ const joiSchema = Joi.object({
 
 const Product = model('product', productSchema);
 
-module.exports = { Product, joiSchema };
+module.exports = { Product, joiCalcSchema };

@@ -1,7 +1,6 @@
 const { User } = require('../../models');
-const { BloodDietProduct } = require('../../models');
+const { Product } = require('../../models');
 const { RequestError } = require('../../helpers');
-
 
 const updateUser = async (req, res) => {
   const { bloodType, height, age, curWeight, desWeight } = req.body;
@@ -15,7 +14,7 @@ const updateUser = async (req, res) => {
       10 * (curWeight - desWeight)
   );
 
-  const products = await BloodDietProduct.find({});
+  const products = await Product.find({});
 
   const notRecProducts = products.filter(
     product => product.groupBloodNotAllowed[bloodType] === true
