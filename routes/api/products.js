@@ -6,8 +6,8 @@ const { ctrlWrapper, validation, auth } = require('../../middelwares');
 const { joiCalcSchema } = require('../../models/product');
 
 router.post('/', validation(joiCalcSchema), ctrlWrapper(getDiet));
-router.get('/all', ctrlWrapper(ctrl.allProducts));
-router.get('/all/query', auth, ctrlWrapper(ctrl.queryProducts));
-router.post('/:id', auth, ctrlWrapper(ctrl.bloodDietProductUser));
+router.get('/', ctrlWrapper(ctrl.allProducts));
+router.get('/query', auth, ctrlWrapper(ctrl.queryProducts));
+// router.post('/:id', auth, ctrlWrapper(ctrl.bloodDietProductUser));
 
 module.exports = router;
