@@ -24,14 +24,12 @@ const userSchema = Schema(
     //   type: Boolean,
     //   default: false,
     // },
+
     bloodType: {
       type: Number,
       default: null,
     },
-    dailyCalorie: {
-      type: Number,
-      default: null,
-    },
+
     height: {
       type: Number,
       default: null,
@@ -45,6 +43,11 @@ const userSchema = Schema(
       default: null,
     },
     desWeight: {
+      type: Number,
+      default: null,
+    },
+
+    dailyCalorie: {
       type: Number,
       default: null,
     },
