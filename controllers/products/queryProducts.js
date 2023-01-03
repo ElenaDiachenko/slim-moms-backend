@@ -1,10 +1,10 @@
-const { BloodDietProduct } = require('../../models');
+const { Product } = require('../../models');
 const { RequestError } = require('../../helpers');
 
 const queryProducts = async (req, res) => {
   const { title } = req.query;
 
-  const result = await BloodDietProduct.find();
+  const result = await Product.find();
 
   const matchedProducts = result.filter(product =>
     product.title.ua.toLowerCase().includes(title)
