@@ -4,7 +4,6 @@ const logger = require('morgan');
 require('dotenv').config();
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
-
 const authRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
 const diaryRouter = require('./routes/api/diary');
