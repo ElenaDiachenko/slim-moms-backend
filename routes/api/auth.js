@@ -15,4 +15,5 @@ router.post('/login', userLoginValidation, ctrlWrapper(ctrl.login));
 router.get('/logout', auth, ctrlWrapper(ctrl.logout));
 router.get('/google', ctrlWrapper(googleAuth));
 router.get('/google-redirect', ctrlWrapper(googleRedirect));
+router.get('/refresh', ctrlWrapper(ctrl.refresh));
 module.exports = router;

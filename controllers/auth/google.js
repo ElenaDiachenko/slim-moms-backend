@@ -1,15 +1,15 @@
 const queryString = require('querystring');
 const axios = require('axios');
 const { v4 } = require('uuid');
-const { User } = require('../../models');
+const { User, Session } = require('../../models');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { createToken } = require('../../helpers');
 
 const { SECRET_KEY } = process.env;
 const { URL } = require('url');
 
 const googleAuth = async (req, res) => {
-  console.log('111111');
   const stringifiedParams = queryString.stringify({
     client_id: process.env.GOOGLE_CLIENT_ID,
     redirect_uri: `${process.env.BASE_URL}/api/auth/google-redirect`,
@@ -27,7 +27,6 @@ const googleAuth = async (req, res) => {
 };
 
 const googleRedirect = async (req, res) => {
-
   const fullUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
   const myURL = new URL(fullUrl);
   const code = myURL.searchParams.get('code');
@@ -64,14 +63,22 @@ const googleRedirect = async (req, res) => {
       name,
     });
   }
+  const newSession = await Session.create({
+    uid: user._id,
+  });
   const payload = {
     id: user._id,
+    sid: newSession._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '3h' });
+  const { token, refreshToken } = createToken(payload);
 
   await User.findByIdAndUpdate(user._id, { token });
 
+  res.cookie('refreshToken', refreshToken, {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+  });
   return res.redirect(
     `${process.env.FRONTEND_URL}/google-redirect/?token=${token}&name=${name}&email=${email}`
   );
