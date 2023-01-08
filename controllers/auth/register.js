@@ -1,10 +1,7 @@
-const { User } = require('../../models');
+const { User, Session } = require('../../models');
 const bcrypt = require('bcryptjs');
-const { RequestError } = require('../../helpers');
+const { RequestError, createToken } = require('../../helpers');
 // const { v4 } = require('uuid');
-const jwt = require('jsonwebtoken');
-
-const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
   const { name, password, email } = req.body;
@@ -23,14 +20,22 @@ const register = async (req, res) => {
     name,
     // verificationToken,
   });
+  const newSession = await Session.create({
+    uid: newUser._id,
+  });
   const payload = {
     id: newUser._id,
+    sid: newSession._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '3h' });
+  const { token, refreshToken } = createToken(payload);
 
   await User.findByIdAndUpdate(newUser._id, { token });
 
+  res.cookie('refreshToken', refreshToken, {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+  });
   res.status(201).json({
     status: 'success',
     code: 201,

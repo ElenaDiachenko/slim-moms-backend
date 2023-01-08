@@ -1,8 +1,8 @@
-const { User } = require('../../models');
-const { RequestError } = require('../../helpers');
-const jwt = require('jsonwebtoken');
+const { User, Session } = require('../../models');
+const { RequestError, createToken } = require('../../helpers');
+// const jwt = require('jsonwebtoken');
 
-const { SECRET_KEY } = process.env;
+// const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {
   const { password, email } = req.body;
@@ -12,14 +12,21 @@ const login = async (req, res) => {
     throw RequestError(404, 'Email is wrong or verify or password is wrong');
   }
 
+  const newSession = await Session.create({
+    uid: user._id,
+  });
   const payload = {
     id: user._id,
+    sid: newSession._id,
   };
-
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '3h' });
+  const { token, refreshToken } = createToken(payload);
+  // const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '3h' });
 
   await User.findByIdAndUpdate(user._id, { token });
-
+  res.cookie('refreshToken', refreshToken, {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+  });
   res.json({
     status: 'success',
     code: 200,
