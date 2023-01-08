@@ -24,18 +24,20 @@ const refresh = async (req, res) => {
     sid: newSession._id,
   };
 
-  const { token, refreshToken: newRefreshToken } = createToken(payload);
-  await User.findByIdAndUpdate(user._id, { token });
+  const { token: newToken, refreshToken: newRefreshToken } =
+    createToken(payload);
+  await User.findByIdAndUpdate(user._id, { token: newToken }, { new: true });
 
   res.cookie('refreshToken', newRefreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   });
 
+  console.log(newToken);
   res.json({
     status: 'success',
     code: 200,
-    token,
+    token: newToken,
   });
 };
 
