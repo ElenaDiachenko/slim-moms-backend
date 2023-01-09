@@ -1,8 +1,5 @@
 const { User, Session } = require('../../models');
 const { RequestError, createToken } = require('../../helpers');
-// const jwt = require('jsonwebtoken');
-
-// const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {
   const { password, email } = req.body;
@@ -20,7 +17,6 @@ const login = async (req, res) => {
     sid: newSession._id,
   };
   const { token, refreshToken } = createToken(payload);
-  // const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '3h' });
 
   await User.findByIdAndUpdate(user._id, { token });
   res.cookie('refreshToken', refreshToken, {

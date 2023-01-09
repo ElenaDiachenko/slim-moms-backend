@@ -5,6 +5,8 @@ const logger = require('morgan');
 require('dotenv').config();
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
+const corsOptions = require('./utils/corsOptions');
+
 const authRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
 const diaryRouter = require('./routes/api/diary');
@@ -16,12 +18,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));
 app.use(cookieParser());
-app.use(
-  cors({
-    credentials: true,
-    origin: process.env.FRONTEND_URL,
-  })
-);
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/api/auth', authRouter);
