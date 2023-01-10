@@ -8,7 +8,7 @@ const refresh = async (req, res) => {
     throw RequestError(401, 'Unauthorized');
   }
   const { id, sid } = jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY);
-  const user = await User.findById(id);
+  let user = await User.findById(id);
   const session = await Session.findById(sid);
 
   if (!user || !session) {
@@ -26,18 +26,34 @@ const refresh = async (req, res) => {
 
   const { token: newToken, refreshToken: newRefreshToken } =
     createToken(payload);
-  await User.findByIdAndUpdate(user._id, { token: newToken }, { new: true });
+  user = await User.findByIdAndUpdate(
+    user._id,
+    { token: newToken },
+    { new: true }
+  );
 
   res.cookie('refreshToken', newRefreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   });
-
+  const newUser = {
+    name: user.name,
+    bloodType: user.bloodType,
+    height: user.height,
+    age: user.age,
+    curWeight: user.curWeight,
+    desWeight: user.desWeight,
+    dailyCalorie: user.dailyCalorie,
+    notRecProducts: user.notRecProducts,
+  };
   console.log(newToken);
+  console.log(newUser);
+
   res.json({
     status: 'success',
     code: 200,
     token: newToken,
+    user: newUser,
   });
 };
 

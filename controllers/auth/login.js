@@ -3,7 +3,7 @@ const { RequestError, createToken } = require('../../helpers');
 
 const login = async (req, res) => {
   const { password, email } = req.body;
-  const user = await User.findOne({ email });
+  let user = await User.findOne({ email });
 
   if (!user || !user.comparePassword(password)) {
     throw RequestError(404, 'Email is wrong or verify or password is wrong');
@@ -18,16 +18,26 @@ const login = async (req, res) => {
   };
   const { token, refreshToken } = createToken(payload);
 
-  await User.findByIdAndUpdate(user._id, { token });
+  user = await User.findByIdAndUpdate(user._id, { token });
   res.cookie('refreshToken', refreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   });
+  const newUser = {
+    name: user.name,
+    bloodType: user.bloodType,
+    height: user.height,
+    age: user.age,
+    curWeight: user.curWeight,
+    desWeight: user.desWeight,
+    dailyCalorie: user.dailyCalorie,
+    notRecProducts: user.notRecProducts,
+  };
   res.json({
     status: 'success',
     code: 200,
     token,
-    user,
+    user: newUser,
   });
 };
 
