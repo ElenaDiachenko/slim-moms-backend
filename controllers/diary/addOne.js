@@ -1,33 +1,21 @@
 const { DailyProduct } = require('../../models');
 
-// const getProducts = async () => {
-//   const result = await BloodDietProduct.find({});
-//   return result;
-// };
-
 const addOne = async (req, res) => {
   const { _id } = req.user;
 
   const { weight, product, date, baseCaloricity } = req.body;
-  // const products = await getProducts();
-
-  // const productCaloricity = products.find(
-  //   it => it.title.ua === product
-  // ).calories;
 
   const calories = (baseCaloricity * weight) / 100;
 
-  const savedProduct = await DailyProduct.find({ date, owner: _id });
-
-  const duplicateProduct = await savedProduct.find(
-    it => it.product === product
-  );
-
+  const duplicateProduct = await DailyProduct.findOne({ product, date });
   let result;
 
   if (!duplicateProduct) {
     result = await DailyProduct.create({
-      ...req.body,
+      weight,
+      product,
+      date,
+      baseCaloricity,
       calories,
       owner: _id,
     });
@@ -46,17 +34,11 @@ const addOne = async (req, res) => {
     );
   }
 
-  !duplicateProduct
-    ? res.status(201).json({
-        status: 'succes',
-        code: 201,
-        result,
-      })
-    : res.status(200).json({
-        status: 'succes',
-        code: 200,
-        result,
-      });
+  res.status(!duplicateProduct ? 201 : 200).json({
+    status: 'success',
+    code: !duplicateProduct ? 201 : 200,
+    result,
+  });
 };
 
 module.exports = addOne;
