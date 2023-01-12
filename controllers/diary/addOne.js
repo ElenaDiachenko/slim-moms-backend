@@ -2,12 +2,15 @@ const { DailyProduct } = require('../../models');
 
 const addOne = async (req, res) => {
   const { _id } = req.user;
-
   const { weight, product, date, baseCaloricity } = req.body;
 
   const calories = (baseCaloricity * weight) / 100;
 
-  const duplicateProduct = await DailyProduct.findOne({ product, date });
+  const duplicateProduct = await DailyProduct.findOne({
+    product,
+    date,
+    owner: _id,
+  });
   let result;
 
   if (!duplicateProduct) {
@@ -19,9 +22,10 @@ const addOne = async (req, res) => {
       calories,
       owner: _id,
     });
-  } else {
+  }
+  if (duplicateProduct) {
     result = await DailyProduct.findByIdAndUpdate(
-      duplicateProduct._id,
+      { _id: duplicateProduct._id },
       {
         product: duplicateProduct.product,
         weight: Math.round(duplicateProduct.weight + weight),
@@ -33,7 +37,6 @@ const addOne = async (req, res) => {
       }
     );
   }
-
   res.status(!duplicateProduct ? 201 : 200).json({
     status: 'success',
     code: !duplicateProduct ? 201 : 200,

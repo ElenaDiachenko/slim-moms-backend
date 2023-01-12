@@ -46,8 +46,6 @@ const refresh = async (req, res) => {
     dailyCalorie: user.dailyCalorie,
     notRecProducts: user.notRecProducts,
   };
-  console.log(newToken);
-  console.log(newUser);
 
   res.json({
     status: 'success',
