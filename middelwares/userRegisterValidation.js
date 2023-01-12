@@ -12,6 +12,11 @@ const userRegisterValidation = (req, res, next) => {
     password: Joi.string().min(6).required(),
 
     token: Joi.string(),
+    bloodType: Joi.string().valid('1', '2', '3', '4'),
+    height: Joi.number().min(100).max(250),
+    age: Joi.number().min(18).max(100),
+    curWeight: Joi.number(),
+    desWeight: Joi.number(),
   });
 
   const validationResult = schema.validate(req.body);
