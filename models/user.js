@@ -26,7 +26,7 @@ const userSchema = Schema(
     // },
 
     bloodType: {
-      type: Number,
+      type: String,
       default: null,
     },
 

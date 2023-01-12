@@ -1,39 +1,14 @@
 const { User } = require('../../models');
-const { Product } = require('../../models');
-const { RequestError } = require('../../helpers');
+const { calculateDiet } = require('../../helpers');
 
 const updateUser = async (req, res) => {
-  const { bloodType, height, age, curWeight, desWeight } = req.body;
   const { _id } = req.user;
 
-  const dailyCalorie = Math.round(
-    10 * curWeight +
-      6.25 * height -
-      5 * age -
-      161 -
-      10 * (curWeight - desWeight)
-  );
-
-  const products = await Product.find({});
-
-  const notRecProducts = products.filter(
-    product => product.groupBloodNotAllowed[bloodType] === true
-  );
-
-  if (!notRecProducts.length) {
-    throw RequestError(404, 'Not found');
-  }
-
-  await User.findByIdAndUpdate(
+  const data = await calculateDiet(req.body);
+  const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
-      bloodType,
-      height,
-      age,
-      curWeight,
-      desWeight,
-      dailyCalorie,
-      notRecProducts,
+      ...data,
     },
     {
       new: true,
@@ -41,13 +16,13 @@ const updateUser = async (req, res) => {
   );
 
   const user = {
-    bloodType,
-    height,
-    age,
-    curWeight,
-    desWeight,
-    dailyCalorie,
-    notRecProducts,
+    bloodType: updatedUser.bloodType,
+    height: updatedUser.height,
+    age: updatedUser.age,
+    curWeight: updatedUser.curWeight,
+    desWeight: updatedUser.desWeight,
+    dailyCalorie: updatedUser.dailyCalorie,
+    notRecProducts: updatedUser.notRecProducts,
   };
 
   res.json({

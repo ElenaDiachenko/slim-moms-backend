@@ -1,6 +1,7 @@
 const { User, Session } = require('../../models');
 const bcrypt = require('bcryptjs');
-const { RequestError, createToken } = require('../../helpers');
+const { RequestError, createToken, calculateDiet } = require('../../helpers');
+
 // const { v4 } = require('uuid');
 
 const register = async (req, res) => {
@@ -11,13 +12,14 @@ const register = async (req, res) => {
     throw RequestError(409, 'Email in use');
   }
   // const verificationToken = v4();
-
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+  const data = await calculateDiet(req.body);
 
   const newUser = await User.create({
     password: hashPassword,
     email,
     name,
+    ...data,
     // verificationToken,
   });
   const newSession = await Session.create({
@@ -43,6 +45,7 @@ const register = async (req, res) => {
     user: {
       name,
       email,
+      ...data,
       // verificationToken: result.verificationToken,
     },
   });
