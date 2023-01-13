@@ -11,6 +11,5 @@ router.patch(
   validation(joiCalcSchema),
   ctrlWrapper(ctrl.updateUser)
 );
-router.get('/current', auth, ctrlWrapper(ctrl.getCurrent));
 
 module.exports = router;
