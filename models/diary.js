@@ -29,7 +29,7 @@ const diarySchema = Schema({
 });
 
 const joiSchema = Joi.object({
-  date: Joi.date().format('YYYY.MM.DDZ').required(),
+  date: Joi.date().format('YYYY.MM.DD').required(),
   product: Joi.string().required(),
   weight: Joi.number().required(),
   baseCaloricity: Joi.number().required(),

@@ -12,8 +12,8 @@ const getByDate = async (req, res) => {
 
   const result = await DailyProduct.find({ date, owner: _id });
 
-  if (!result.length) {
-    throw RequestError(404, 'Added products not found on this date');
+  if (!result) {
+    throw RequestError(404, ' Not found');
   }
 
   const caloricityPerDay = result.reduce((acc, it) => {
