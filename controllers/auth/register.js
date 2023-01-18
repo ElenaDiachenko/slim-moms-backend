@@ -14,7 +14,7 @@ const register = async (req, res) => {
   // const verificationToken = v4();
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
   const data = await calculateDiet(req.body);
-
+if(!data){}
   const newUser = await User.create({
     password: hashPassword,
     email,
