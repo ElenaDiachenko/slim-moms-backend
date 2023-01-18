@@ -3,10 +3,8 @@ const axios = require('axios');
 const { v4 } = require('uuid');
 const { User, Session } = require('../../models');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const { createToken } = require('../../helpers');
 
-const { SECRET_KEY } = process.env;
 const { URL } = require('url');
 
 const googleAuth = async (req, res) => {
