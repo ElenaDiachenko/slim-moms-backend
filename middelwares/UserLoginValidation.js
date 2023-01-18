@@ -15,7 +15,7 @@ const userLoginValidation = (req, res, next) => {
   const validationResult = schema.validate(req.body);
 
   if (validationResult.error) {
-    throw RequestError(400, validationResult.error);
+    throw RequestError(400, validationResult.error.message);
   }
 
   next();
