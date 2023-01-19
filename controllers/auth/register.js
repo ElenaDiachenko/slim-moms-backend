@@ -5,7 +5,7 @@ const { RequestError, createToken, calculateDiet } = require('../../helpers');
 // const { v4 } = require('uuid');
 
 const register = async (req, res) => {
-  const { name, password, email } = req.body;
+  const { name, password, email,...rest } = req.body;
   const user = await User.findOne({ email });
 
   if (user) {
@@ -13,7 +13,14 @@ const register = async (req, res) => {
   }
   // const verificationToken = v4();
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  const data = await calculateDiet(req.body);
+
+  let data;
+  if (Object.keys(rest).length) {
+    data = await calculateDiet(rest)
+  } else {
+    data= {}
+  }
+  // const data = await calculateDiet(req.body);
 
   const newUser = await User.create({
     password: hashPassword,
@@ -25,6 +32,7 @@ const register = async (req, res) => {
   const newSession = await Session.create({
     uid: newUser._id,
   });
+  
   const payload = {
     id: newUser._id,
     sid: newSession._id,

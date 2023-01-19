@@ -23,7 +23,7 @@ const getByDate = async (req, res) => {
 
   const products = await getProducts(_id);
 
-  const dateFirstAdded = products[0].date;
+  const dateFirstAdded = products[0]?.date ?? new Date(date);
 
   res.json({
     status: 'success',

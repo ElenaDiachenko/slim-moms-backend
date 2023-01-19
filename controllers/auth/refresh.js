@@ -14,7 +14,8 @@ const refresh = async (req, res) => {
   if (!user || !session) {
     throw RequestError(401, 'Unauthorized');
   }
-  await Session.findByIdAndDelete(session._id);
+  console.log(session)
+  await Session.findByIdAndDelete(sid);
 
   const newSession = await Session.create({
     uid: user._id,
