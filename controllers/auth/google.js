@@ -76,6 +76,8 @@ const googleRedirect = async (req, res) => {
   res.cookie('refreshToken', refreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
+    sameSite: "none",
+    secure:"true",
   });
   return res.redirect(
     `${process.env.FRONTEND_URL}/google-redirect/?token=${token}&name=${name}&email=${email}`

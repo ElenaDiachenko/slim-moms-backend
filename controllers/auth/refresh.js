@@ -14,7 +14,7 @@ const refresh = async (req, res) => {
   if (!user || !session) {
     throw RequestError(401, 'Unauthorized');
   }
-  console.log(session)
+
   await Session.findByIdAndDelete(sid);
 
   const newSession = await Session.create({
@@ -36,6 +36,8 @@ const refresh = async (req, res) => {
   res.cookie('refreshToken', newRefreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
+    sameSite: "none",
+    secure:"true",
   });
   const newUser = {
     name: user.name,
